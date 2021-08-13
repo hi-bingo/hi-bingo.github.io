@@ -215,86 +215,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://hi-bingo.github.io/2021/08/08/BackTrader%E4%BD%BF%E7%94%A8o/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Bingo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bingo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/08/BackTrader%E4%BD%BF%E7%94%A8o/" class="post-title-link" itemprop="url">BackTrader使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-08 18:33:42" itemprop="dateCreated datePublished" datetime="2021-08-08T18:33:42+08:00">2021-08-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 22:24:10" itemprop="dateModified" datetime="2021-08-13T22:24:10+08:00">2021-08-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="BackTrader回测入门"><a href="#BackTrader回测入门" class="headerlink" title="BackTrader回测入门"></a>BackTrader回测入门</h1><h2 id="BackTrader模块"><a href="#BackTrader模块" class="headerlink" title="BackTrader模块"></a>BackTrader模块</h2><p>BackTrader框架主要由以下几个模块组成：</p>
-<ul>
-<li>数据加载（Data Feed）：将交易策略的数据加载到回测框架中。</li>
-<li>交易策略（Strategy）：该模块是编程过程中最复杂的部分，需要设计交易决策，得出买入/卖出信号。</li>
-<li>回测框架（Cerebro）：运行主框架，需要设置一些参数<ul>
-<li>初始资金</li>
-<li>佣金</li>
-<li>交易策略交易头寸大小</li>
-<li>…</li>
-</ul>
-</li>
-<li>策略分析（Analyzers）:以图形和风险收益等指标对交易策略的回测结果进行评价</li>
-</ul>
-<h2 id="入门策略"><a href="#入门策略" class="headerlink" title="入门策略"></a>入门策略</h2><h3 id="策略介绍"><a href="#策略介绍" class="headerlink" title="策略介绍"></a>策略介绍</h3><p>本文主要目的为简单上手BackTrader回测框架，因此选取了最简单的均线交叉策略：短周期均线向上突破长期均线则买入，短期均线下穿长期均线则卖出。</p>
-<p>回测数据选取BTC的15min一个月的历史k线（<a target="_blank" rel="noopener" href="https://github.com/hi-bingo/binance_kline">https://github.com/hi-bingo/binance_kline</a> 可下载Binance上现货交易对的历史K线）</p>
-<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">import datetime</span><br><span class="line">import backtrader as bt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class SmaCrossStrategy(bt.Strategy):</span><br><span class="line">   params = dict(</span><br><span class="line">       short_period=5,</span><br><span class="line">       long_period=20</span><br><span class="line">   )</span><br><span class="line"></span><br><span class="line">   def __init__(self):</span><br><span class="line">       # 定义短期和长期sma指标</span><br><span class="line">       self.short_term_sma = bt.ind.SMA(period=self.params.short_period)</span><br><span class="line">       self.long_term_sma = bt.ind.SMA(period=self.params.long_period)</span><br><span class="line"></span><br><span class="line">   def log(self, txt, dt=None):</span><br><span class="line">       dt = dt or bt.num2date(self.datas[0].datetime[0])</span><br><span class="line">       print(&#x27;[&#123;&#125;] &#123;&#125;&#x27;.format(dt.isoformat(), txt))</span><br><span class="line"></span><br><span class="line">   def next(self):</span><br><span class="line">       if not self.position:</span><br><span class="line">           if self.short_term_sma[0] &gt; self.long_term_sma[0]:</span><br><span class="line">               self.buy()</span><br><span class="line">               self.log(&#x27;buy@&#123;&#125;&#x27;.format(self.data.close[0]))</span><br><span class="line">       else:</span><br><span class="line">           if self.short_term_sma[0] &lt; self.long_term_sma[0]:</span><br><span class="line">               self.sell()</span><br><span class="line">               self.log(&#x27;sell@&#123;&#125;&#x27;.format(self.data.close[0]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">   cerebro = bt.Cerebro()</span><br><span class="line">   # 设置初始资金和交易手续费</span><br><span class="line">   cerebro.broker.setcash(1000000.0)</span><br><span class="line">   cerebro.broker.setcommission(commission=0.001)</span><br><span class="line"></span><br><span class="line">   data = bt.feeds.GenericCSVData(</span><br><span class="line">       dataname=&quot;data/BTC-USDT_15m_2021-07-01_2021-08-01.csv&quot;,</span><br><span class="line">       dtformat=lambda x: datetime.datetime.utcfromtimestamp(float(x) / 1000.0),</span><br><span class="line">       timeframe=bt.TimeFrame.Minutes,</span><br><span class="line">       datetime=0,</span><br><span class="line">       open=1,</span><br><span class="line">       high=2,</span><br><span class="line">       low=3,</span><br><span class="line">       close=4,</span><br><span class="line">       volume=5,</span><br><span class="line">       openinterest=-1</span><br><span class="line">   )</span><br><span class="line"></span><br><span class="line">   cerebro.adddata(data)</span><br><span class="line">   cerebro.addstrategy(SmaCrossStrategy)</span><br><span class="line"></span><br><span class="line">   print(&#x27;初始资金: %.2f&#x27; % cerebro.broker.getvalue())</span><br><span class="line">   cerebro.addanalyzer(bt.analyzers.DrawDown, _name=&#x27;draw_down&#x27;)</span><br><span class="line">   cerebro.addanalyzer(bt.analyzers.Returns, _name=&quot;returns&quot;)</span><br><span class="line">   strats_results = cerebro.run()</span><br><span class="line">   # run返回一个列表，应该是对应多策略回测结果</span><br><span class="line">   for result in strats_results:</span><br><span class="line">       print(&#x27;最终资金: %.2f&#x27; % cerebro.broker.getvalue())</span><br><span class="line">       print(&#x27;回撤指标:&#x27;, result.analyzers.draw_down.get_analysis())</span><br><span class="line">       print(&#x27;收益率指标:&#x27;, result.analyzers.returns.get_analysis())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
 
@@ -361,7 +281,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
